@@ -50,7 +50,7 @@ polkadot-node-subsystem-test-helpers = { workspace = true }
 polkadot-primitives-test-helpers = { workspace = true }
 
 [features]
-default = []
+default = ["experimental-collator-protocol"]
 experimental-collator-protocol = [
 	"async-trait",
 ]
