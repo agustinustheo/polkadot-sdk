@@ -432,7 +432,7 @@ impl pallet_staking_async::Config for Runtime {
 	type RuntimeHoldReason = RuntimeHoldReason;
 	type CurrencyToVote = sp_staking::currency_to_vote::SaturatingCurrencyToVote;
 	type RewardRemainder = ();
-	type Slash = ();
+	type Slash = pallet_dap::SlashToDap<Runtime>;
 	type Reward = ();
 	type SessionsPerEra = SessionsPerEra;
 	type BondingDuration = BondingDuration;
@@ -462,6 +462,10 @@ impl pallet_staking_async_rc_client::Config for Runtime {
 	type AHStakingInterface = Staking;
 	type SendToRelayChain = StakingXcmToRelayChain;
 	type MaxValidatorSetRetries = ConstU32<5>;
+}
+
+impl pallet_dap::Config for Runtime {
+	type Currency = Balances;
 }
 
 parameter_types! {
