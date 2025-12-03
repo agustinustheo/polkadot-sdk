@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1764693386226,
+  "lastUpdate": 1764722559857,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "dispute-coordinator-regression-bench": [
@@ -19501,6 +19501,55 @@ window.BENCHMARK_DATA = {
           {
             "name": "dispute-coordinator",
             "value": 0.0026710701800000004,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "eresav@me.com",
+            "name": "Andrei Eres",
+            "username": "AndreiEres"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "6de451a105ca0a5feb675a215d4e8de5207febf6",
+          "message": "statement-store: New RPC result types (#10421)\n\n# Description\n\nInternal submittion result type changed to keep more information, which\nshould be useful for RPC clients.\n\nApplication-level errors moved from JSON-RPC transport errors into the\nresult type for `statement_submit` RPC method to help clients\ndistinguish between submission outcomes instead of parsing error\nstrings.\n\nRuntime API wasn't changed.\n\n## Integration\n\n**Breaking Change** - `statement_submit` now returns\n`StatementSubmitResult` enum instead of `()`.\n\n## Review Notes\n\nSubmission outcomes now return as Ok(result) with status field. Only\ninfrastructure failures (database errors, decode errors) remain as\nJSON-RPC errors.\n\nNetworkPriority removed as we never used it, reputation changes\nadjusted.\n\n---------\n\nCo-authored-by: cmd[bot] <41898282+github-actions[bot]@users.noreply.github.com>\nCo-authored-by: Alexandru Gheorghe <49718502+alexggh@users.noreply.github.com>",
+          "timestamp": "2025-12-02T23:02:34Z",
+          "tree_id": "a9c85b731c11359474045c22ae839311d378a4f6",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/6de451a105ca0a5feb675a215d4e8de5207febf6"
+        },
+        "date": 1764722535735,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Received from peers",
+            "value": 23.800000000000004,
+            "unit": "KiB"
+          },
+          {
+            "name": "Sent to peers",
+            "value": 227.09999999999997,
+            "unit": "KiB"
+          },
+          {
+            "name": "dispute-distribution",
+            "value": 0.00874726179999999,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.00502608349999999,
+            "unit": "seconds"
+          },
+          {
+            "name": "dispute-coordinator",
+            "value": 0.002705347380000001,
             "unit": "seconds"
           }
         ]
