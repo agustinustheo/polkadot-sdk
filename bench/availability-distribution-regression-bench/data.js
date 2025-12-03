@@ -1,62 +1,8 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1764693288617,
+  "lastUpdate": 1764722459320,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-distribution-regression-bench": [
-      {
-        "commit": {
-          "author": {
-            "email": "52418509+georgepisaltu@users.noreply.github.com",
-            "name": "georgepisaltu",
-            "username": "georgepisaltu"
-          },
-          "committer": {
-            "email": "noreply@github.com",
-            "name": "GitHub",
-            "username": "web-flow"
-          },
-          "distinct": true,
-          "id": "82cf2305511459032071302aba96ba82b35b04f8",
-          "message": "[PoP] Add personhood tracking pallets (#8164)\n\nThis PR adds the building blocks of a Proof of Personhood system. It\ncontains work contributed and reviewed by members of the PoP team.\n\n## `pallet-people`\n\nThe People pallet stores and manages identifiers of individuals who have\nproven their personhood. It tracks their personal IDs, organizes their\ncryptographic keys into rings, and allows them to use contextual aliases\nthrough authentication in extensions. When transactions include\ncryptographic proofs of belonging to the people set, the pallet's\ntransaction extension verifies these proofs before allowing the\ntransaction to proceed. This enables other pallets to check if actions\ncome from unique persons while preserving privacy through the ring-based\nstructure.\n\nThe pallet implements the `PeopleTrait` interface and accepts new\npersons after they prove their uniqueness elsewhere, stores their\ninformation, and will support removing persons in the future. While\nother systems (e.g., wallets) generate the proofs, this pallet handles\nthe storage of all necessary data and verifies the proofs when used.\n\nPeople are identified through a new cryptographic primitive, as defined\nin the `GenerateVerifiable` interface in the `verifiable` crate. People\nget the privilege of running free transactions for supported calls\nthrough a combination of a new `AsPerson` transaction extension and new\norigin types `PersonalIdentity` and `PersonalAlias`.\n\n## `pallet-origin-restriction`\n\nThis pallet tracks certain origin and limits how much total \"fee usage\"\nthey can accumulate. Usage gradually recovers as blocks pass. This\npallet and its associated transaction extension are used to limit the\namount of on-chain compute people get when they run free transactions,\nsince the fee model does not apply to them.\n\n## `pallet-dummy-dim`\n\nAllows control of a `PeopleTrait` interface through a privileged origin\nby simulating a DIM. It is meant only to help in testing scenarios and\nacts as a control panel for `PeopleTrait` implementers. It is not an\nofficial DIM and should not be used in production, but, like\n`pallet-sudo`, should prove useful on testnets.\n\n---------\n\nSigned-off-by: georgepisaltu <george.pisaltu@parity.io>\nCo-authored-by: gui <gui.thiolliere@gmail.com>\nCo-authored-by: Zebedeusz <michal.gil@parity.io>\nCo-authored-by: cmd[bot] <41898282+github-actions[bot]@users.noreply.github.com>",
-          "timestamp": "2025-06-03T11:41:10Z",
-          "tree_id": "affe92e736edc96ca4c9dbbeb6a2a01142553223",
-          "url": "https://github.com/paritytech/polkadot-sdk/commit/82cf2305511459032071302aba96ba82b35b04f8"
-        },
-        "date": 1748955630763,
-        "tool": "customSmallerIsBetter",
-        "benches": [
-          {
-            "name": "Sent to peers",
-            "value": 18481.666666666653,
-            "unit": "KiB"
-          },
-          {
-            "name": "Received from peers",
-            "value": 433.3333333333332,
-            "unit": "KiB"
-          },
-          {
-            "name": "test-environment",
-            "value": 0.008743287586666766,
-            "unit": "seconds"
-          },
-          {
-            "name": "availability-store",
-            "value": 0.1580705799533334,
-            "unit": "seconds"
-          },
-          {
-            "name": "availability-distribution",
-            "value": 0.01277575438666666,
-            "unit": "seconds"
-          },
-          {
-            "name": "bitfield-distribution",
-            "value": 0.022404484986666674,
-            "unit": "seconds"
-          }
-        ]
-      },
       {
         "commit": {
           "author": {
@@ -26999,6 +26945,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "availability-distribution",
             "value": 0.013244088966666663,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "eresav@me.com",
+            "name": "Andrei Eres",
+            "username": "AndreiEres"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "6de451a105ca0a5feb675a215d4e8de5207febf6",
+          "message": "statement-store: New RPC result types (#10421)\n\n# Description\n\nInternal submittion result type changed to keep more information, which\nshould be useful for RPC clients.\n\nApplication-level errors moved from JSON-RPC transport errors into the\nresult type for `statement_submit` RPC method to help clients\ndistinguish between submission outcomes instead of parsing error\nstrings.\n\nRuntime API wasn't changed.\n\n## Integration\n\n**Breaking Change** - `statement_submit` now returns\n`StatementSubmitResult` enum instead of `()`.\n\n## Review Notes\n\nSubmission outcomes now return as Ok(result) with status field. Only\ninfrastructure failures (database errors, decode errors) remain as\nJSON-RPC errors.\n\nNetworkPriority removed as we never used it, reputation changes\nadjusted.\n\n---------\n\nCo-authored-by: cmd[bot] <41898282+github-actions[bot]@users.noreply.github.com>\nCo-authored-by: Alexandru Gheorghe <49718502+alexggh@users.noreply.github.com>",
+          "timestamp": "2025-12-02T23:02:34Z",
+          "tree_id": "a9c85b731c11359474045c22ae839311d378a4f6",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/6de451a105ca0a5feb675a215d4e8de5207febf6"
+        },
+        "date": 1764722434772,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 18481.666666666653,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 433.3333333333332,
+            "unit": "KiB"
+          },
+          {
+            "name": "availability-distribution",
+            "value": 0.01298556428666667,
+            "unit": "seconds"
+          },
+          {
+            "name": "bitfield-distribution",
+            "value": 0.02235399238666667,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-store",
+            "value": 0.15741673022000005,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.007211676439999981,
             "unit": "seconds"
           }
         ]
