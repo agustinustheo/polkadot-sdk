@@ -1,52 +1,8 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1764693256738,
+  "lastUpdate": 1764722425309,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "availability-recovery-regression-bench": [
-      {
-        "commit": {
-          "author": {
-            "email": "60601340+lexnv@users.noreply.github.com",
-            "name": "Alexandru Vasile",
-            "username": "lexnv"
-          },
-          "committer": {
-            "email": "noreply@github.com",
-            "name": "GitHub",
-            "username": "web-flow"
-          },
-          "distinct": true,
-          "id": "85b71daf7aac59da4d2186b45d589c7c619f0981",
-          "message": "sync/fix: Clear gap sync on known imported blocks (#8445)\n\nThis PR ensures that warp sync gaps are properly cleared when known\nblocks are imported. Previously, gaps were only removed in response to\n`ImportedUnknown` events.\n\nThis limitation caused issues for asset-hub and bridge-hub collators,\nwhich remained stuck in the \"Block history\" state without progressing.\n\n\nThe root cause lies in the client.info() reporting a gap during node\nstartup or restart (ie block verification fails). In some cases, a peer\nmay respond with the missing blocks after we’ve already imported them\nlocally, leaving the gap open.\n\nGrafana link: https://grafana.teleport.parity.io/goto/jCcsBLxNg?orgId=1\n\nTraces from production:\n\n```\n2025-05-06 12:55:34.251 DEBUG                 main sync: [Parachain] Starting gap sync #4935955 - #4935955    \n\n2025-05-06 12:55:34.558 TRACE tokio-runtime-worker sync: [Parachain] New gap block request for 12D3KooWAVQMhkXmc5ueSYasdsRWQbKus2YGZ6HDZUB4ViJMCxXy, (best:5103253, common:5103253) BlockRequest { id: 0, fields: HEADER | BODY | JUSTIFICATION, from: Number(4935955), direction: Descending, max: Some(1) }    \n\n2025-05-06 12:55:34.558 TRACE tokio-runtime-worker sync: [Parachain] Processed `SyncingAction::StartRequest` to 12D3KooWAVQMhkXmc5ueSYasdsRWQbKus2YGZ6HDZUB4ViJMCxXy with strategy key StrategyKey(\"ChainSync\").    \n\n2025-05-06 12:55:34.608 TRACE tokio-runtime-worker sync: [Parachain] BlockResponse 0 from 12D3KooWAVQMhkXmc5ueSYasdsRWQbKus2YGZ6HDZUB4ViJMCxXy with 1 blocks  (4935955)    \n\n2025-05-06 12:55:34.608 DEBUG tokio-runtime-worker sync: [Parachain] Drained 1 gap blocks from 4935954    \n\t\n2025-05-06 12:55:35.511 TRACE tokio-runtime-worker sync::import-queue: [Parachain] Starting import of 1 blocks  (4935955)    \n\n2025-05-06 12:55:35.517 TRACE tokio-runtime-worker sync::import-queue: [Parachain] Block already in chain 4935955: 0x63db2b40cccac020fbc922e5e98bb3955f4cdaa823a2be85ecf22776745ccacc    \n\n2025-05-06 12:55:35.517 TRACE tokio-runtime-worker sync::import-queue: [Parachain] Block imported successfully Some(4935955) (0x63db…cacc)    \n\n2025-05-06 12:55:35.517 TRACE tokio-runtime-worker sync: [Parachain] Cleared blocks from 4935955 to 4935956    \n```\n\n### Testing Done\n\nAdded two tests to verify that warp sync gaps are correctly cleared\nunder both block import scenarios. The first test closely follows the\noperations performed by the node, while the second one emulates the\nimports.\n\n### Next Steps\n\nAdded extra debug logs to monitor if the issue persists (pointing\ntowards a corupt database -- ie client.info() always has the gap\npresent).\n\nCloses: https://github.com/paritytech/polkadot-sdk/issues/8416\n\ncc @paritytech/networking\n\n---------\n\nSigned-off-by: Alexandru Vasile <alexandru.vasile@parity.io>\nCo-authored-by: Nikolai Kozlov <1431590+nkpar@users.noreply.github.com>",
-          "timestamp": "2025-06-04T11:15:17Z",
-          "tree_id": "233a89f158f8e202259e85922b4e2dac282bf7f2",
-          "url": "https://github.com/paritytech/polkadot-sdk/commit/85b71daf7aac59da4d2186b45d589c7c619f0981"
-        },
-        "date": 1749040267372,
-        "tool": "customSmallerIsBetter",
-        "benches": [
-          {
-            "name": "Sent to peers",
-            "value": 1.6666666666666665,
-            "unit": "KiB"
-          },
-          {
-            "name": "Received from peers",
-            "value": 307203,
-            "unit": "KiB"
-          },
-          {
-            "name": "availability-recovery",
-            "value": 11.246091417,
-            "unit": "seconds"
-          },
-          {
-            "name": "test-environment",
-            "value": 0.2004010149333333,
-            "unit": "seconds"
-          }
-        ]
-      },
       {
         "commit": {
           "author": {
@@ -21999,6 +21955,50 @@ window.BENCHMARK_DATA = {
           {
             "name": "test-environment",
             "value": 0.2013661484,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "eresav@me.com",
+            "name": "Andrei Eres",
+            "username": "AndreiEres"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "6de451a105ca0a5feb675a215d4e8de5207febf6",
+          "message": "statement-store: New RPC result types (#10421)\n\n# Description\n\nInternal submittion result type changed to keep more information, which\nshould be useful for RPC clients.\n\nApplication-level errors moved from JSON-RPC transport errors into the\nresult type for `statement_submit` RPC method to help clients\ndistinguish between submission outcomes instead of parsing error\nstrings.\n\nRuntime API wasn't changed.\n\n## Integration\n\n**Breaking Change** - `statement_submit` now returns\n`StatementSubmitResult` enum instead of `()`.\n\n## Review Notes\n\nSubmission outcomes now return as Ok(result) with status field. Only\ninfrastructure failures (database errors, decode errors) remain as\nJSON-RPC errors.\n\nNetworkPriority removed as we never used it, reputation changes\nadjusted.\n\n---------\n\nCo-authored-by: cmd[bot] <41898282+github-actions[bot]@users.noreply.github.com>\nCo-authored-by: Alexandru Gheorghe <49718502+alexggh@users.noreply.github.com>",
+          "timestamp": "2025-12-02T23:02:34Z",
+          "tree_id": "a9c85b731c11359474045c22ae839311d378a4f6",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/6de451a105ca0a5feb675a215d4e8de5207febf6"
+        },
+        "date": 1764722400783,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 1.6666666666666665,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 307203,
+            "unit": "KiB"
+          },
+          {
+            "name": "test-environment",
+            "value": 0.20218588080000002,
+            "unit": "seconds"
+          },
+          {
+            "name": "availability-recovery",
+            "value": 11.311260656033333,
             "unit": "seconds"
           }
         ]
