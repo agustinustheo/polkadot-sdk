@@ -1,107 +1,8 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1764693320846,
+  "lastUpdate": 1764722492781,
   "repoUrl": "https://github.com/paritytech/polkadot-sdk",
   "entries": {
     "approval-voting-regression-bench": [
-      {
-        "commit": {
-          "author": {
-            "email": "60601340+lexnv@users.noreply.github.com",
-            "name": "Alexandru Vasile",
-            "username": "lexnv"
-          },
-          "committer": {
-            "email": "noreply@github.com",
-            "name": "GitHub",
-            "username": "web-flow"
-          },
-          "distinct": false,
-          "id": "f6d18b73c4138cd834c6979be6eed291e63c6f17",
-          "message": "client/net: Use litep2p as the default network backend (#8461)\n\n# Litep2p Becomes the Default Network Backend\n\nThis PR finalizes the [litep2p](https://github.com/paritytech/litep2p)\nintegration and makes it the default network backend for substrate-based\nchains.\n\n## Litep2p Improvements\n\nAfter the stabilization, a forum post will follow with up to date\ninformation and more accurate measurements of the live impact of\nlitep2p.\n\n### CPU Usage Reduction\n\n**Litep2p consumes roughly 2x less CPU than the libp2p alternative**.\nThis frees up resources for other usecases (subsystems) and enables\nrunning nodes on more cost-efficient hardware.\n\nThis metric has been collected by the `networking::libp2p-node` metric\nof a live Kusama validator. This represents the CPU time spent on\npolling the networking task. Litep2p CPU consumption is on the left,\nusing roughtly 1.3x CPUs, while libp2p on the right uses roughly 2.9-3x\nCPUs:\n\n![Screenshot 2025-05-26 at 15 23\n22](https://github.com/user-attachments/assets/17bf1ed8-b887-423e-b131-f0bbf146919e)\n\n\nThis metric has been collected by the NodeExporter of a live Kusama\nvalidator. Litep2p CPU consumption is on the left, using roughtly 230\nCPU units, while libp2p on the right uses roughly 350 CPU units. This\nmakes litep2p ~1.52 times more effiecient:\n\n![Screenshot 2025-05-26 at 15 24\n33](https://github.com/user-attachments/assets/8923cb56-241d-4e1d-9593-33c5def2ff4d)\n\n\n\n### DHT Improvements and Authority Discovery\n\nLitep2p is able to discover peers faster via the Kademlia protocol than\nlibp2p. This behavior manifests in faster discovery times for\nvalidators. For context, libp2p discovers 1K DHT records (authority\nrecords) in approximately 10 minutes, while litep2p discovers them in\njust 2.5 minutes (for more info see\nhttps://github.com/paritytech/polkadot-sdk/issues/7077#issuecomment-2575662449).\n\nThis will improve issues we've seen with libp2p that causes validators\nto not receive rewards:\n- https://github.com/paritytech/polkadot-sdk/issues/8548\n\n### Stable Sync Peers\n\nLitep2p presents a more stable peer count in comparison with the libp2p\nbackend. This ensures we can sync up faster than libp2p to the tip of\nthe chain. In an older experiment, litep2p syncs to the tip of the chain\nin 526s, compared to 803s for libp2p. The stability of connections shows\nimprovements for other protocols as well:\n\n![Screenshot 2025-05-26 at 15 01\n59](https://github.com/user-attachments/assets/ac3607ba-a551-49e5-9a50-f5150a6b619f)\n\nThe previous image shows on the left the litep2p version and on the\nright the libp2p version.\n\n\n### Revert Kusama Enablement\nThis PR reverts https://github.com/paritytech/polkadot-sdk/pull/7866.\nLitep2p is now enabled by default, we don't need to selectively enable\nit on different chains.\n\n### Litep2p 0.9.5\n\nThis release primarily focuses on strengthening the stability of the\nwebsocket transport. We've resolved an issue where higher-level\nbuffering was causing the Noise protocol to fail when decoding messages.\n\nWe've also significantly improved connectivity between litep2p and\nSmoldot (the Substrate-based light client). Empty frames are now handled\ncorrectly, preventing handshake timeouts and ensuring smoother\ncommunication.\n\nFinally, we've carried out several dependency updates to keep the\nlibrary current with the latest versions of its underlying components.\n\nFixed:\n- substream/fix: Allow empty payloads with 0-length frame\n([#395](https://github.com/paritytech/litep2p/pull/395))\n- websocket: Fix connection stability on decrypt messages\n([#393](https://github.com/paritytech/litep2p/pull/393))\n\nChanged:\n- crypto/noise: Show peerIDs that fail to decode\n([#392](https://github.com/paritytech/litep2p/pull/392))\n- cargo: Bump yamux to 0.13.5 and tokio to 1.45.0\n([#396](https://github.com/paritytech/litep2p/pull/396))\n- ci: Enforce and apply clippy rules\n([#388](https://github.com/paritytech/litep2p/pull/388))\n- build(deps): bump ring from 0.16.20 to 0.17.14\n([#389](https://github.com/paritytech/litep2p/pull/389))\n- Update hickory-resolver 0.24.2 -> 0.25.2\n([#386](https://github.com/paritytech/litep2p/pull/386))\n\n\n### Fix peerset reserve only mode\n\nThis has been move in PR:\nhttps://github.com/paritytech/polkadot-sdk/pull/8650 for ease of\nreviewing.\nThe PR rejects non-reserved peers in the reserved-only mode of the\nlitep2p notification peerset.\n\n---------\n\nSigned-off-by: Alexandru Vasile <alexandru.vasile@parity.io>",
-          "timestamp": "2025-06-03T10:44:02Z",
-          "tree_id": "8ce5aa0b4afe6ea5fbe1d90c56dcb5b10f9560b0",
-          "url": "https://github.com/paritytech/polkadot-sdk/commit/f6d18b73c4138cd834c6979be6eed291e63c6f17"
-        },
-        "date": 1748952148157,
-        "tool": "customSmallerIsBetter",
-        "benches": [
-          {
-            "name": "Sent to peers",
-            "value": 63625.71,
-            "unit": "KiB"
-          },
-          {
-            "name": "Received from peers",
-            "value": 52940.8,
-            "unit": "KiB"
-          },
-          {
-            "name": "approval-voting/test-environment",
-            "value": 0.000021031049999999996,
-            "unit": "seconds"
-          },
-          {
-            "name": "approval-voting-parallel/approval-voting-gather-signatures",
-            "value": 0.005623836279999998,
-            "unit": "seconds"
-          },
-          {
-            "name": "approval-distribution/test-environment",
-            "value": 0.000020854260000000002,
-            "unit": "seconds"
-          },
-          {
-            "name": "approval-voting-parallel/approval-voting-parallel-1",
-            "value": 2.3496426109700006,
-            "unit": "seconds"
-          },
-          {
-            "name": "approval-voting-parallel/approval-voting-parallel-3",
-            "value": 2.3535983949200014,
-            "unit": "seconds"
-          },
-          {
-            "name": "approval-voting-parallel/approval-voting-parallel-db",
-            "value": 1.8928484943300035,
-            "unit": "seconds"
-          },
-          {
-            "name": "approval-voting-parallel/approval-voting-parallel-0",
-            "value": 2.3574173853399985,
-            "unit": "seconds"
-          },
-          {
-            "name": "approval-voting-parallel/approval-voting-parallel-2",
-            "value": 2.37874651941,
-            "unit": "seconds"
-          },
-          {
-            "name": "approval-voting",
-            "value": 0.000021031049999999996,
-            "unit": "seconds"
-          },
-          {
-            "name": "approval-voting-parallel/approval-voting-parallel-subsystem",
-            "value": 0.4510012385800096,
-            "unit": "seconds"
-          },
-          {
-            "name": "test-environment",
-            "value": 3.286775056602534,
-            "unit": "seconds"
-          },
-          {
-            "name": "approval-voting-parallel",
-            "value": 11.788878479830013,
-            "unit": "seconds"
-          },
-          {
-            "name": "approval-distribution",
-            "value": 0.000020854260000000002,
-            "unit": "seconds"
-          }
-        ]
-      },
       {
         "commit": {
           "author": {
@@ -49499,6 +49400,105 @@ window.BENCHMARK_DATA = {
           {
             "name": "test-environment",
             "value": 2.6850673254109507,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "eresav@me.com",
+            "name": "Andrei Eres",
+            "username": "AndreiEres"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "6de451a105ca0a5feb675a215d4e8de5207febf6",
+          "message": "statement-store: New RPC result types (#10421)\n\n# Description\n\nInternal submittion result type changed to keep more information, which\nshould be useful for RPC clients.\n\nApplication-level errors moved from JSON-RPC transport errors into the\nresult type for `statement_submit` RPC method to help clients\ndistinguish between submission outcomes instead of parsing error\nstrings.\n\nRuntime API wasn't changed.\n\n## Integration\n\n**Breaking Change** - `statement_submit` now returns\n`StatementSubmitResult` enum instead of `()`.\n\n## Review Notes\n\nSubmission outcomes now return as Ok(result) with status field. Only\ninfrastructure failures (database errors, decode errors) remain as\nJSON-RPC errors.\n\nNetworkPriority removed as we never used it, reputation changes\nadjusted.\n\n---------\n\nCo-authored-by: cmd[bot] <41898282+github-actions[bot]@users.noreply.github.com>\nCo-authored-by: Alexandru Gheorghe <49718502+alexggh@users.noreply.github.com>",
+          "timestamp": "2025-12-02T23:02:34Z",
+          "tree_id": "a9c85b731c11359474045c22ae839311d378a4f6",
+          "url": "https://github.com/paritytech/polkadot-sdk/commit/6de451a105ca0a5feb675a215d4e8de5207febf6"
+        },
+        "date": 1764722468507,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Sent to peers",
+            "value": 63625.869999999995,
+            "unit": "KiB"
+          },
+          {
+            "name": "Received from peers",
+            "value": 52939.40000000001,
+            "unit": "KiB"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-gather-signatures",
+            "value": 0.00567960754,
+            "unit": "seconds"
+          },
+          {
+            "name": "test-environment",
+            "value": 2.7678565675609876,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-distribution",
+            "value": 0.00002113656,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-distribution/test-environment",
+            "value": 0.00002113656,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-db",
+            "value": 1.9469766098700005,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel",
+            "value": 12.410812125730002,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-2",
+            "value": 2.5493387308099984,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-1",
+            "value": 2.48028702626,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-0",
+            "value": 2.5003205080400006,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-3",
+            "value": 2.4783724444899997,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting",
+            "value": 0.00001998767,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting/test-environment",
+            "value": 0.00001998767,
+            "unit": "seconds"
+          },
+          {
+            "name": "approval-voting-parallel/approval-voting-parallel-subsystem",
+            "value": 0.44983719872000255,
             "unit": "seconds"
           }
         ]
